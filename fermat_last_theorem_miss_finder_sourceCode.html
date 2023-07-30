@@ -1,0 +1,143 @@
+<html>
+<head>
+<title>fermat_last_theorem_miss_finder.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #629755; font-style: italic;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #808080;}
+.s3 { color: #cc7832;}
+.s4 { color: #6897bb;}
+.s5 { color: #6a8759;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+fermat_last_theorem_miss_finder.py</font>
+</center></td></tr></table>
+<pre><span class="s0">''' 
+Title: Fermat's Last Theorem Near Miss Finder 
+File: fermat_last_theorem_miss_finder.py 
+No external files necessary to run the program 
+No external files created by the program 
+Programmer: Andrew J. Milligan 
+Email: andrewjmilligan@lewisu.edu 
+Course: Software Engineering, CPSC 60500 
+Date: July 30, 2023 
+This program helps an interactive user search for “near misses” of the form (x, y, z, n, k) in the formula xn + yn = zn. 
+Resources: Numberfile on Youtube, www.geeksforgeeks.org, www.w3schools.com 
+'''</span>
+
+<span class="s2"># The built-in sys module provides access to some variables used or maintained</span>
+<span class="s2"># by the Python interpreter and to functions that interact strongly with the interpreter.</span>
+<span class="s3">import </span><span class="s1">sys</span>
+
+<span class="s3">def </span><span class="s1">main():</span>
+    <span class="s2"># User input for n and k that ensures valid user inputs for the necessary range</span>
+    <span class="s1">n = </span><span class="s4">0</span>
+    <span class="s3">while not </span><span class="s4">2 </span><span class="s1">&lt; n &lt; </span><span class="s4">12</span><span class="s1">:</span>
+        <span class="s3">try</span><span class="s1">:</span>
+            <span class="s1">n = float(input(</span><span class="s5">&quot;Enter the value for n (2&lt;n&lt;12): &quot;</span><span class="s1">))</span>
+        <span class="s3">except </span><span class="s1">ValueError:</span>
+            <span class="s1">print(</span><span class="s5">&quot;Invalid input, please enter a valid number for n.&quot;</span><span class="s1">)</span>
+            <span class="s3">continue</span>
+
+    <span class="s1">k = </span><span class="s4">0</span>
+    <span class="s3">while </span><span class="s1">k &lt;= </span><span class="s4">10</span><span class="s1">:</span>
+        <span class="s3">try</span><span class="s1">:</span>
+            <span class="s1">k = float(input(</span><span class="s5">&quot;Enter the value for k (k&gt;10): &quot;</span><span class="s1">))</span>
+        <span class="s3">except </span><span class="s1">ValueError:</span>
+            <span class="s1">print(</span><span class="s5">&quot;Invalid input, please enter a valid number for k.&quot;</span><span class="s1">)</span>
+            <span class="s3">continue</span>
+
+    <span class="s2"># Initialize minimum relative miss and absolute miss</span>
+    <span class="s2"># Start with infinity because any real number will be smaller than infinity</span>
+    <span class="s1">min_relative_miss = float(</span><span class="s5">'inf'</span><span class="s1">)</span>
+    <span class="s1">min_absolute_miss = float(</span><span class="s5">'inf'</span><span class="s1">)</span>
+
+    <span class="s2"># Variables to hold the coordinates (x, y, z) that correspond to the smallest misses</span>
+    <span class="s1">x_min_miss</span><span class="s3">, </span><span class="s1">y_min_miss</span><span class="s3">, </span><span class="s1">z_min_miss = </span><span class="s3">None, None, None</span>
+
+    <span class="s2"># Counter for near misses</span>
+    <span class="s1">near_misses = </span><span class="s4">0</span>
+
+    <span class="s1">total_iterations = (int(k) - </span><span class="s4">10 </span><span class="s1">+ </span><span class="s4">1</span><span class="s1">) ** </span><span class="s4">2</span>
+    <span class="s1">iteration_counter = </span><span class="s4">0</span>
+    <span class="s1">next_checkpoint = total_iterations / </span><span class="s4">10  </span><span class="s2"># The point at which we print the first progress update</span>
+
+    <span class="s2"># Iterating over possible x and y values</span>
+    <span class="s3">for </span><span class="s1">x </span><span class="s3">in </span><span class="s1">range(</span><span class="s4">10</span><span class="s3">, </span><span class="s1">int(k) + </span><span class="s4">1</span><span class="s1">):</span>
+        <span class="s3">for </span><span class="s1">y </span><span class="s3">in </span><span class="s1">range(</span><span class="s4">10</span><span class="s3">, </span><span class="s1">int(k) + </span><span class="s4">1</span><span class="s1">):</span>
+
+            <span class="s2"># Update the iteration counter and check if it's time for a progress update</span>
+            <span class="s1">iteration_counter += </span><span class="s4">1</span>
+            <span class="s3">if </span><span class="s1">iteration_counter &gt;= next_checkpoint:</span>
+                <span class="s1">print(</span><span class="s5">f&quot;Completed </span><span class="s3">{</span><span class="s4">100 </span><span class="s1">* iteration_counter / total_iterations</span><span class="s3">:</span><span class="s5">.1f</span><span class="s3">}</span><span class="s5">% of calculations, &quot;</span>
+                      <span class="s5">f&quot;found </span><span class="s3">{</span><span class="s1">near_misses</span><span class="s3">} </span><span class="s5">near misses so far.&quot;</span><span class="s1">)</span>
+                <span class="s1">next_checkpoint += total_iterations / </span><span class="s4">10</span>
+
+            <span class="s2"># Calculate xn + yn</span>
+            <span class="s3">try</span><span class="s1">:</span>
+                <span class="s1">sum_xn_yn = pow(x</span><span class="s3">, </span><span class="s1">n) + pow(y</span><span class="s3">, </span><span class="s1">n)</span>
+            <span class="s3">except </span><span class="s1">OverflowError:</span>
+                <span class="s1">print(</span><span class="s5">f&quot;Calculation overflow for x=</span><span class="s3">{</span><span class="s1">x</span><span class="s3">}</span><span class="s5">, y=</span><span class="s3">{</span><span class="s1">y</span><span class="s3">}</span><span class="s5">. Skipping this pair.&quot;</span><span class="s1">)</span>
+                <span class="s3">continue</span>
+
+            <span class="s2"># Find potential z values that bracket sum_xn_yn</span>
+            <span class="s3">try</span><span class="s1">:</span>
+                <span class="s1">z = pow(sum_xn_yn</span><span class="s3">, </span><span class="s4">1 </span><span class="s1">/ n)  </span><span class="s2"># z might not be an integer</span>
+            <span class="s3">except </span><span class="s1">OverflowError:</span>
+                <span class="s1">print(</span><span class="s5">f&quot;Calculation overflow for x=</span><span class="s3">{</span><span class="s1">x</span><span class="s3">}</span><span class="s5">, y=</span><span class="s3">{</span><span class="s1">y</span><span class="s3">}</span><span class="s5">. Skipping this pair.&quot;</span><span class="s1">)</span>
+                <span class="s3">continue</span>
+
+            <span class="s1">z_floor = int(z)</span>
+            <span class="s1">z_ceil = z_floor + </span><span class="s4">1  </span><span class="s2"># z_ceil = z_floor + 1, to bracket sum_xn_yn</span>
+
+            <span class="s2"># Calculate misses</span>
+            <span class="s3">try</span><span class="s1">:</span>
+                <span class="s1">miss1 = abs(sum_xn_yn - pow(z_floor</span><span class="s3">, </span><span class="s1">n))</span>
+                <span class="s1">miss2 = abs(sum_xn_yn - pow(z_ceil</span><span class="s3">, </span><span class="s1">n))</span>
+            <span class="s3">except </span><span class="s1">OverflowError:</span>
+                <span class="s1">print(</span><span class="s5">f&quot;Calculation overflow for x=</span><span class="s3">{</span><span class="s1">x</span><span class="s3">}</span><span class="s5">, y=</span><span class="s3">{</span><span class="s1">y</span><span class="s3">}</span><span class="s5">, z=</span><span class="s3">{</span><span class="s1">z</span><span class="s3">}</span><span class="s5">. Skipping this pair.&quot;</span><span class="s1">)</span>
+                <span class="s3">continue</span>
+
+            <span class="s2"># Find which z value (z_floor or z_ceil) provides a closer match</span>
+            <span class="s3">if </span><span class="s1">miss1 &lt; miss2:</span>
+                <span class="s1">miss = miss1</span>
+                <span class="s1">z_closest = z_floor</span>
+            <span class="s3">else</span><span class="s1">:</span>
+                <span class="s1">miss = miss2</span>
+                <span class="s1">z_closest = z_ceil</span>
+
+            <span class="s2"># Calculate the relative size of the miss</span>
+            <span class="s1">relative_miss = miss / sum_xn_yn</span>
+
+            <span class="s2"># Check if this is the smallest absolute and relative miss so far</span>
+            <span class="s3">if </span><span class="s1">miss &lt; min_absolute_miss:</span>
+                <span class="s1">min_absolute_miss = miss</span>
+                <span class="s1">min_relative_miss = relative_miss</span>
+                <span class="s1">x_min_miss</span><span class="s3">, </span><span class="s1">y_min_miss</span><span class="s3">, </span><span class="s1">z_min_miss = x</span><span class="s3">, </span><span class="s1">y</span><span class="s3">, </span><span class="s1">z_closest</span>
+                <span class="s1">near_misses += </span><span class="s4">1</span>
+
+                <span class="s2"># Check if the relative miss can be printed without memory errors</span>
+                <span class="s3">if </span><span class="s1">len(str(relative_miss)) &lt;= </span><span class="s4">27</span><span class="s1">:  </span><span class="s2"># Decimal plus 25 digits plus point</span>
+                    <span class="s1">print(</span><span class="s5">f&quot;x=</span><span class="s3">{</span><span class="s1">x</span><span class="s3">}</span><span class="s5">, y=</span><span class="s3">{</span><span class="s1">y</span><span class="s3">}</span><span class="s5">, z=</span><span class="s3">{</span><span class="s1">z_closest</span><span class="s3">}</span><span class="s5">, miss=</span><span class="s3">{</span><span class="s1">miss</span><span class="s3">}</span><span class="s5">, relative miss=</span><span class="s3">{</span><span class="s1">relative_miss</span><span class="s3">}</span><span class="s5">&quot;</span><span class="s1">)</span>
+                <span class="s3">else</span><span class="s1">:</span>
+                    <span class="s1">print(</span><span class="s5">f&quot;x=</span><span class="s3">{</span><span class="s1">x</span><span class="s3">}</span><span class="s5">, y=</span><span class="s3">{</span><span class="s1">y</span><span class="s3">}</span><span class="s5">, z=</span><span class="s3">{</span><span class="s1">z_closest</span><span class="s3">}</span><span class="s5">, miss=</span><span class="s3">{</span><span class="s1">miss</span><span class="s3">}</span><span class="s5">, relative miss is too large to print.&quot;</span><span class="s1">)</span>
+
+    <span class="s2"># Print the total number of near misses found and the smallest miss</span>
+    <span class="s1">print(</span><span class="s5">f&quot;</span><span class="s3">\n</span><span class="s5">Total number of near misses found: </span><span class="s3">{</span><span class="s1">near_misses</span><span class="s3">}</span><span class="s5">&quot;</span><span class="s1">)</span>
+    <span class="s1">print(</span><span class="s5">f&quot;The smallest miss is </span><span class="s3">{</span><span class="s1">min_absolute_miss</span><span class="s3">} </span><span class="s5">at x=</span><span class="s3">{</span><span class="s1">x_min_miss</span><span class="s3">}</span><span class="s5">, y=</span><span class="s3">{</span><span class="s1">y_min_miss</span><span class="s3">}</span><span class="s5">, z=</span><span class="s3">{</span><span class="s1">z_min_miss</span><span class="s3">} </span><span class="s5">with relative miss=</span><span class="s3">{</span><span class="s1">min_relative_miss</span><span class="s3">}</span><span class="s5">&quot;</span><span class="s1">)</span>
+
+<span class="s2"># End of program</span>
+
+<span class="s3">while True</span><span class="s1">:</span>
+    <span class="s1">main()</span>
+    <span class="s1">continue_program = input(</span><span class="s5">&quot;Would you like to run the program again? Enter Y for yes and N for no: &quot;</span><span class="s1">)</span>
+    <span class="s3">if </span><span class="s1">continue_program.lower() != </span><span class="s5">&quot;y&quot;</span><span class="s1">:</span>
+        <span class="s3">break</span>
+</pre>
+</body>
+</html>
